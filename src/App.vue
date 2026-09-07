@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useProfile, type Profile } from "./composables/useProfile";
 
 const appWindow = getCurrentWindow();
+const { switchProfile } = useProfile();
+const profileLoaded = ref(false);
 import hudControls from "./components/hud/hudControls.vue";
 import dashboard from "./components/hud/dashboard.vue";
 
-onMounted(() => {
-  invoke("position_window_bottom_right");
+onMounted(async () => {
+  // invoke("position_window_bottom_right");
+  const profileMode = await invoke("get_profile_mode");
+  switchProfile(profileMode as Profile);
+  profileLoaded.value = true;
 });
 async function startResizing() {
   await appWindow.startResizeDragging("SouthEast");
@@ -23,7 +29,10 @@ async function startResizing() {
     </div>
     <div class="resize-handle" @mousedown="startResizing()">⌟</div>
     <!-- Contents -->
-    <dashboard />
+    <div v-if="!profileLoaded">Loading...</div>
+    <div v-else class="h-100">
+      <dashboard />
+    </div>
   </div>
 </template>
 <style scoped>

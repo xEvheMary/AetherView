@@ -1,10 +1,23 @@
 use tauri::Manager;
+use crate::commands::settings;
+use crate::utils::position::{position_window_internal, restore_window_position};
 
-use crate::utils::position::position_window_bottom_right_internal;
+#[tauri::command]
+pub fn get_profile_mode(app: tauri::AppHandle) -> Result<String, String> {
+    let settings = settings::load_settings(&app)?;
+    Ok(settings.active_profile)
+}
 
 #[tauri::command]
 pub fn set_profile_mode(
     app: tauri::AppHandle,
+    mode: String,
+) -> Result<(), String> {
+    set_profile_mode_internal(&app, mode)
+}
+
+pub fn set_profile_mode_internal(
+    app: &tauri::AppHandle,
     mode: String,
 ) -> Result<(), String> {
     let window = app
@@ -29,6 +42,14 @@ pub fn set_profile_mode(
             window.set_resizable(true).unwrap();
         }
     }
-    position_window_bottom_right_internal(&window)?;
+    save_profile_mode(app, mode)?;
+    position_window_internal(&window, None, None)?;
+    Ok(())
+}
+
+pub fn save_profile_mode(app: &tauri::AppHandle, mode: String) -> Result<(), String> {
+    let mut settings = settings::load_settings(app)?;
+    settings.active_profile = mode;
+    settings::save_settings(app, &settings)?;
     Ok(())
 }
