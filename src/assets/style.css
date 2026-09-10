@@ -10,6 +10,8 @@
   --av-text: #f6f6f6;
   --av-glass-bg: rgba(28, 28, 30, 0.52);
   --av-border: rgba(255, 255, 255, 0.12);
+  --av-form-bg: rgba(28, 28, 30, 0.3);
+  --av-form-bg-solid: rgb(68, 68, 70);
   --bs-body-bg: transparent; /* kill bootstrap white */
   --bs-body-color: var(--av-text);
 
@@ -53,20 +55,29 @@ body,
 /* AetherView Styles */
 .aether-view {
   height: 100%;
-  background: rgba(28, 28, 30, 0.15);
-  background-image: linear-gradient(
-    130deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.03)
-  );
-  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-  backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: rgba(28, 28, 30, 0.3);
+  background-image:
+    linear-gradient(
+      130deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0.05)
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  -webkit-backdrop-filter: blur(22px) saturate(175%) brightness(1.04);
+  backdrop-filter: blur(22px) saturate(175%) brightness(1.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden; /* clip glass */
+}
+/* style.css:54 */
+.aether-view--form {
+  background: rgba(28, 28, 30, 0.9) !important;
+}
+:root[data-theme="light"] .aether-view--form {
+  background: rgba(243, 243, 243, 0.35) !important;
 }
 .aether-view::before {
   content: "";
@@ -122,7 +133,7 @@ body,
 }
 
 /* Popover Styles */
-.process-popover {
+.custom-popover {
   position: fixed;
   z-index: 9999;
   min-width: 180px;
@@ -136,6 +147,16 @@ body,
 .process-popover-title {
   margin-bottom: 6px;
   font-weight: 600;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  word-break: break-word;
 }
 
 @media (prefers-color-scheme: light) {

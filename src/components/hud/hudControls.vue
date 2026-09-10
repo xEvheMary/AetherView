@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useProfile } from "../../composables/useProfile";
+import { useProfile } from "@/composables/useProfile";
 import HudMenu from "./hudMenu.vue";
 
 const pinned = ref(false);

@@ -1,14 +1,7 @@
 use std::fs;
-use std::path::PathBuf;
 use serde_json;
-use tauri::Manager;
 use crate::models::settings::AppSettings;
-
-fn get_config_path(app: &tauri::AppHandle) -> Result<PathBuf, String> {
-    let config_dir = app
-        .path().app_data_dir().map_err(|e| format!("Failed to get app data directory: {}", e))?;
-    Ok(config_dir)
-}
+use crate::utils::data::get_config_path;
 
 pub fn load_settings(app: &tauri::AppHandle) -> Result<AppSettings, String> {
     let settings_path = get_config_path(app)?.join("settings.json");

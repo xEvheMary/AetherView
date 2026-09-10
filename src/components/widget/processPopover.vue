@@ -14,7 +14,7 @@ defineExpose({
 <template>
   <Teleport to="body">
     <div
-      class="process-popover"
+      class="custom-popover process-popover"
       ref="popoverRef"
       :style="{ top: `${top}px`, left: `${left}px` }"
     >

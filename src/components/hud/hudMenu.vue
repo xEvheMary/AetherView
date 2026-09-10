@@ -7,6 +7,7 @@ defineProps<{
 }>();
 
 const { activeProfile, switchProfile } = useProfile();
+
 const isMinimal = computed(() => activeProfile.value === "minimal");
 function switchProfileTo(profile: Profile) {
   switchProfile(profile);
@@ -35,6 +36,13 @@ function switchProfileTo(profile: Profile) {
             >Minimal</span
           >
         </button>
+        <button class="hud-menu-item" @click="switchProfileTo('monitor')">
+          <i class="bi bi-grid"></i>
+          <span
+            :style="{ 'font-weight': activeProfile == 'monitor' ? 'bold' : '' }"
+            >Monitor</span
+          >
+        </button>
       </div>
       <div class="menu-section">
         <button class="hud-menu-item">
@@ -59,7 +67,7 @@ function switchProfileTo(profile: Profile) {
 }
 .hud-menu.minimal {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   gap: 0.25rem;
@@ -68,6 +76,7 @@ function switchProfileTo(profile: Profile) {
   font-size: 0.8rem;
 }
 .hud-menu.minimal .menu-section {
+  display: contents;
   border: none;
 }
 .hud-menu-item {

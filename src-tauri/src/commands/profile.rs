@@ -1,6 +1,6 @@
 use tauri::Manager;
 use crate::commands::settings;
-use crate::utils::position::{position_window_internal, restore_window_position};
+use crate::utils::position::{position_window_internal};
 
 #[tauri::command]
 pub fn get_profile_mode(app: tauri::AppHandle) -> Result<String, String> {
@@ -33,6 +33,14 @@ pub fn set_profile_mode_internal(
             );
             window.set_resizable(false).unwrap();
         }
+        "form" => {
+            let _ = window.set_size(
+                tauri::Size::Logical(
+                    tauri::LogicalSize::new(300.0, 360.0)
+                )
+            );
+            window.set_resizable(true).unwrap();
+        }
         _ => {
             let _ = window.set_size(
                 tauri::Size::Logical(
@@ -49,7 +57,9 @@ pub fn set_profile_mode_internal(
 
 pub fn save_profile_mode(app: &tauri::AppHandle, mode: String) -> Result<(), String> {
     let mut settings = settings::load_settings(app)?;
-    settings.active_profile = mode;
+    if mode != "form" {
+        settings.active_profile = mode;
+    }
     settings::save_settings(app, &settings)?;
     Ok(())
 }
