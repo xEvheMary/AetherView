@@ -18,6 +18,7 @@ pub struct MonitorStatus {
     pub response_time_ms: Option<u64>,
     pub last_checked: Option<u64>,
     pub last_error: Option<String>,
+    pub history: Vec<Option<u64>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

@@ -1,6 +1,6 @@
-use sysinfo::System;
-use crate::models::metrics::{SystemMetrics, NetworkState};
+use crate::models::metrics::{NetworkState, SystemMetrics};
 use crate::services::process_service::get_network_speed;
+use sysinfo::System;
 
 pub fn collect_system_metrics(state: &mut NetworkState) -> SystemMetrics {
     let mut system = System::new_all();

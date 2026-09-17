@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import Sparkline from "@/components/widget/sparkline.vue";
 import type {
   TargetMonitor as Monitor,
   MonitorStatus as Status,
@@ -27,10 +28,10 @@ defineExpose({
       </div>
       <div class="monitor-popover-content">
         <p>Method: {{ target?.method }}</p>
-        <p>Interval: {{ target?.interval_seconds }} s</p>
-        <p class="line-clamp-2">
+        <p class="line-clamp-2 mb-1">
           Last Error: {{ status?.last_error ?? "N/A" }}
         </p>
+        <sparkline :data="status?.history ?? []" />
       </div>
     </div>
   </Teleport>

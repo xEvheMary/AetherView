@@ -18,4 +18,5 @@ export interface MonitorStatus {
   response_time_ms: number | null;
   last_checked: number | null;
   last_error: string | null;
+  history: (number | null)[];
 }

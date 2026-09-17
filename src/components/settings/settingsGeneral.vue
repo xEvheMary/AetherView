@@ -14,7 +14,6 @@ watch(
   () => props.content,
   (newValue) => {
     targetMonitor.value = newValue;
-    console.log("targetMonitor updated:", targetMonitor.value);
   },
   { immediate: true },
 );

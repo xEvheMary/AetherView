@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useAppearance } from "@/composables/useAppearance";
 
-defineProps<{
+const props = defineProps<{
+  defaultOpacity?: number;
   top: number;
   left: number;
 }>();
@@ -17,6 +18,13 @@ const handleSliderInput = (e: Event) => {
   const v = Number((e.currentTarget as HTMLInputElement).value); // use currentTarget not target
   if (!Number.isNaN(v)) setOpacity(v);
 };
+watch(
+  () => props.defaultOpacity,
+  (newVal) => {
+    if (newVal !== undefined) setOpacity(newVal);
+  },
+  { immediate: true },
+);
 </script>
 <template>
   <Teleport to="body">
@@ -24,8 +32,8 @@ const handleSliderInput = (e: Event) => {
       class="opac-menu"
       ref="opacityMenu"
       :style="{
-        top: top + 'px',
-        left: left - menuOffset.x + 'px',
+        top: props.top + 'px',
+        left: props.left - menuOffset.x + 'px',
         position: 'absolute',
       }"
     >

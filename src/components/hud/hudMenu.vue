@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { useProfile, type Profile } from "../../composables/useProfile";
 import { useAppearance } from "../../composables/useAppearance";
-defineProps<{
+const props = defineProps<{
+  defaultTheme?: string;
   top: number;
   left: number;
 }>();
 
 const { activeProfile, switchProfile } = useProfile();
 const { theme, setTheme } = useAppearance();
-
+onMounted(() => {
+  if (props.defaultTheme === "dark" || props.defaultTheme === "light")
+    setTheme(props.defaultTheme);
+});
 const isDarkMode = computed({
   get: () => theme.value === "dark",
   set: (value: boolean) => setTheme(value ? "dark" : "light"),
@@ -33,7 +37,7 @@ async function openSettings() {
     <div
       class="hud-menu"
       :class="{ minimal: isMinimal }"
-      :style="{ top: top + 'px', left: left + 'px' }"
+      :style="{ top: props.top + 'px', left: props.left + 'px' }"
     >
       <div class="menu-section">
         <button class="hud-menu-item" @click="switchProfileTo('default')">

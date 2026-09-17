@@ -51,7 +51,6 @@ function submit() {
     return;
   }
   // Handle form submission logic here
-  console.log("Submitting target:", target.value);
   invoke("add_monitor_targets", { target: target.value })
     .catch((err) => {
       console.error("Failed to add target:", err);
@@ -65,7 +64,6 @@ watch(
   (newData) => {
     if (newData) {
       target.value = { ...newData };
-      console.log("Form data updated:", newData);
     }
   },
   { immediate: true },

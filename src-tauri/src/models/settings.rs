@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct AppSettings {
@@ -27,6 +27,7 @@ pub struct AppearanceSettings {
 pub struct MonitoringSettings {
     pub engine_tick_seconds: u64,
     pub slow_response_threshold_ms: u64,
+    pub history_point: usize,
     pub failure_threshold: u32,
     pub logging_enabled: bool,
 }
@@ -50,6 +51,7 @@ impl Default for AppSettings {
             monitoring: MonitoringSettings {
                 engine_tick_seconds: 1,
                 slow_response_threshold_ms: 10000,
+                history_point: 16,
                 failure_threshold: 3,
                 logging_enabled: true,
             },

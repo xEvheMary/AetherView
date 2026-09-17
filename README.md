@@ -9,7 +9,17 @@ Rainmeter inspired app / widget, built for developers in mind, for monitoring re
 ![Static Badge](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vuedotjs&labelColor=black)
 ![Static Badge](https://img.shields.io/badge/Rust-black?style=for-the-badge&logo=rust&labelColor=black)
 
+## ScreenShots
+
+|                                  |                               |
+| :------------------------------: | :---------------------------: |
+|  ![General](docs/images/3.png)   | ![Minimal](docs/images/2.png) |
+| ![Monitoring](docs/images/1.png) | ![Setting](docs/images/4.png) |
+
 ## Features
+
+- Device Monitoring
+- Service / API Monitoring
 
 ### Window
 
@@ -17,6 +27,7 @@ Rainmeter inspired app / widget, built for developers in mind, for monitoring re
 - Always on Top / Pin option
 - Tray / Hidden
 - Persistent settings, target, and profile
+- Settings
 - Change Opacity (soon)
 
 ### Widgets
@@ -41,7 +52,12 @@ Rainmeter inspired app / widget, built for developers in mind, for monitoring re
 
 ## Version History
 
+- 0.3.1
+  - Setting Window
+  - Monitoring graph
+  - Persistent settings
 - 0.2
+  - Base Profiles (Generic, Minimal, Monitor)
   - API Health Monitor (Widget + Profile)
 - 0.1
   - Initial Base Version

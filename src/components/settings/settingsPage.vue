@@ -23,7 +23,6 @@ const tabs = [
 const settings = ref<Settings | null>(null);
 onMounted(async () => {
   settings.value = await invoke("get_settings");
-  console.log(settings.value);
 });
 async function saveSettings(
   update: GeneralSettings | MonitoringSettings | AppearanceSettings,
@@ -38,9 +37,9 @@ async function saveSettings(
   if (settings.value) {
     try {
       await invoke("store_settings", { settings: settings.value });
-      showToast("", "Settings saved successfully", "success", 20000);
+      showToast("", "Settings saved successfully", "success", 2000);
     } catch (error) {
-      showToast("", "Failed to save settings: ${error}", "danger", 20000);
+      showToast("", `Failed to save settings: ${error}`, "danger", 2000);
     }
   }
 }
