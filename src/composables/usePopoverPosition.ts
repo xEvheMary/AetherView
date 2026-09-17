@@ -9,11 +9,17 @@ export function usePopoverPosition() {
     popoverWidth = 250,
     popoverHeight = 150,
     gap = 8,
+    alignment: "left" | "center" | "right" = "left",
   ) {
     const rect = triggerEl.getBoundingClientRect();
 
     let left = rect.left;
     let top = rect.bottom + gap;
+    if (alignment === "center") {
+      left = rect.left + rect.width / 2 - popoverWidth / 2;
+    } else if (alignment === "right") {
+      left = rect.right - popoverWidth;
+    }
     // Prefer above
     const spaceAbove = rect.top;
     const spaceBelow = window.innerHeight - rect.bottom;

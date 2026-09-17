@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "aetherview",
+        "title": "AetherView",
         "width": 240,
         "height": 320,
         "minWidth": 160,

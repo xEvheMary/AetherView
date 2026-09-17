@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { useProfile } from "@/composables/useProfile";
+import { useFormType } from "@/composables/useFormType";
 import type { TargetMonitor } from "@/models/monitors";
 
 const { previousProfile, switchProfile } = useProfile();
+const { formData, resetForm } = useFormType();
 const methodOptions = ["GET"];
 const target = ref<TargetMonitor>({
   id: "",
@@ -40,6 +42,7 @@ function cancel() {
     enabled: true,
   };
   if (previousProfile.value) {
+    resetForm();
     switchProfile(previousProfile.value);
   }
 }
@@ -57,10 +60,26 @@ function submit() {
       cancel();
     });
 }
+watch(
+  formData,
+  (newData) => {
+    if (newData) {
+      target.value = { ...newData };
+      console.log("Form data updated:", newData);
+    }
+  },
+  { immediate: true },
+);
 </script>
 <template>
   <div class="monitor-form aether-scroll">
-    <p class="px-2">Add Monitor Target</p>
+    <div class="d-flex flex-row justify-content-between">
+      <i class="bi bi-chevron-left clickable" @click="cancel"></i>
+      <p class="px-2">
+        <span v-if="target.id === ''">Add</span><span v-else>Edit</span> Monitor
+        Target
+      </p>
+    </div>
     <form class="px-2" @submit.prevent="submit">
       <div class="form-floating mb-2">
         <input
@@ -134,12 +153,17 @@ function submit() {
         >
           Cancel
         </button>
-        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+        <button type="submit" class="btn btn-sm btn-primary">
+          <span v-if="target.id === ''">Add</span><span v-else>Edit</span>
+        </button>
       </div>
     </form>
   </div>
 </template>
 <style scoped>
+.clickable {
+  cursor: pointer;
+}
 .monitor-form {
   display: flex;
   height: 100%;

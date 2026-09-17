@@ -23,10 +23,11 @@ defineExpose({
       :style="{ top: `${top}px`, left: `${left}px` }"
     >
       <div class="monitor-popover-header">
-        {{ target?.name }} ({{ status?.response_time_ms }})
+        {{ target?.name }} ({{ status?.response_time_ms }}ms)
       </div>
       <div class="monitor-popover-content">
         <p>Method: {{ target?.method }}</p>
+        <p>Interval: {{ target?.interval_seconds }} s</p>
         <p class="line-clamp-2">
           Last Error: {{ status?.last_error ?? "N/A" }}
         </p>

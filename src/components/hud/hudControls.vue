@@ -3,14 +3,15 @@ import { computed, ref, onMounted, onUnmounted } from "vue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useProfile } from "@/composables/useProfile";
 import HudMenu from "./hudMenu.vue";
+import OpacityMenu from "./opacityMenu.vue";
 
 const pinned = ref(false);
-const showHudMenu = ref(false);
 const appWindow = getCurrentWindow();
 const isHover = ref(false);
 const burgerButton = ref<HTMLElement | null>(null);
 const { activeProfile } = useProfile();
 const isMinimal = computed(() => activeProfile.value === "minimal");
+const showHudMenu = ref(false);
 const burgerPosition = computed(() => {
   const rect = burgerButton.value?.getBoundingClientRect();
   if (isMinimal.value) {
@@ -19,6 +20,12 @@ const burgerPosition = computed(() => {
   }
   return rect ? { x: rect.left, y: rect.bottom + 3 } : { x: 50, y: 10 };
 });
+const showOpacityMenu = ref(false);
+const opacityButton = ref<HTMLElement | null>(null);
+const opacityPosition = computed(() => {
+  const rect = opacityButton.value?.getBoundingClientRect();
+  return rect ? { x: rect.right, y: rect.bottom + 3 } : { x: 150, y: 10 };
+});
 async function togglePin() {
   pinned.value = !pinned.value;
   await appWindow.setAlwaysOnTop(pinned.value);
@@ -26,17 +33,26 @@ async function togglePin() {
 async function hideWindow() {
   await appWindow.hide();
 }
-async function closeWindow() {
-  await appWindow.close();
-}
 async function startDragging() {
   if (pinned.value) return;
   await appWindow.startDragging();
 }
 function handleMouseLeave() {
   showHudMenu.value = false;
+  showOpacityMenu.value = false;
 }
-
+function toggleBurgerMenu() {
+  showHudMenu.value = !showHudMenu.value;
+  if (showHudMenu.value) {
+    showOpacityMenu.value = false;
+  }
+}
+function toggleOpacityMenu() {
+  showOpacityMenu.value = !showOpacityMenu.value;
+  if (showOpacityMenu.value) {
+    showHudMenu.value = false;
+  }
+}
 onMounted(() => {
   document.body.addEventListener("mouseleave", handleMouseLeave);
 });
@@ -50,11 +66,7 @@ onUnmounted(() => {
     @mouseenter="isHover = true"
     @mouseleave="isHover = false"
   >
-    <button
-      class="btn btn-link"
-      @click="showHudMenu = !showHudMenu"
-      ref="burgerButton"
-    >
+    <button class="btn btn-link" @click="toggleBurgerMenu()" ref="burgerButton">
       <i class="bi bi-list"></i>
     </button>
     <div
@@ -68,17 +80,26 @@ onUnmounted(() => {
     >
       <i class="bi bi-pin"></i>
     </button>
-    <button class="btn btn-link" @click="hideWindow()">
+    <button
+      class="btn btn-link"
+      @click="toggleOpacityMenu()"
+      ref="opacityButton"
+    >
       <i class="bi bi-eye-slash"></i>
     </button>
-    <button class="btn btn-link" @click="closeWindow()">
-      <i class="bi bi-x-lg"></i>
+    <button class="btn btn-link" @click="hideWindow()">
+      <i class="bi bi-dash"></i>
     </button>
   </div>
   <HudMenu
     v-if="showHudMenu"
     :top="burgerPosition.y"
     :left="burgerPosition.x"
+  />
+  <OpacityMenu
+    v-if="showOpacityMenu"
+    :top="opacityPosition.y"
+    :left="opacityPosition.x"
   />
 </template>
 <style scoped>

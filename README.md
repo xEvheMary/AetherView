@@ -16,6 +16,7 @@ Rainmeter inspired app / widget, built for developers in mind, for monitoring re
 - Borderless, Transparent
 - Always on Top / Pin option
 - Tray / Hidden
+- Persistent settings, target, and profile
 - Change Opacity (soon)
 
 ### Widgets

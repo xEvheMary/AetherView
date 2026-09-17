@@ -3,6 +3,8 @@ use tauri::{
     App, Manager, image::Image, include_image, menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem}, tray::{TrayIconBuilder, TrayIconEvent}
 };
 
+use crate::utils::window::open_settings_window;
+
 pub fn setup_tray(app: &mut App) -> tauri::Result<()> {
     let click_through_state = Arc::new(Mutex::new(false));
     let show = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
@@ -49,7 +51,7 @@ pub fn setup_tray(app: &mut App) -> tauri::Result<()> {
                     }
                 }
                 "settings" => {
-                    println!("Settings menu item clicked");
+                    open_settings_window(app);
                 }
                 "quit" => {
                     app.exit(0);

@@ -55,7 +55,7 @@ pub fn restore_window_position(app: &tauri::AppHandle, settings: &crate::models:
     let window = app
         .get_webview_window("main")
         .ok_or("Main window not found")?;
-    if let (Some(x), Some(y)) = (settings.window_x, settings.window_y) {
+    if let (Some(x), Some(y)) = (settings.general.window_x, settings.general.window_y) {
         position_window_internal(&window, Some(x), Some(y))?;
     } else {
         position_window_bottom_right_internal(&window)?;
@@ -75,8 +75,8 @@ pub fn save_window_position(
         .map_err(|e| format!("Failed to get window position: {}", e))?;
 
     let mut settings = load_settings(app)?;
-    settings.window_x = Some(position.x);
-    settings.window_y = Some(position.y);
+    settings.general.window_x = Some(position.x);
+    settings.general.window_y = Some(position.y);
     save_settings(app, &settings)?;
 
     Ok(())

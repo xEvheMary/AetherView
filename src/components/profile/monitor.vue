@@ -6,7 +6,7 @@ import MonitorList from "../widget/monitorList.vue";
 const { switchForm } = useFormType();
 const { switchProfile } = useProfile();
 function openMonitorForm() {
-  switchForm("monitor");
+  switchForm("monitor", null);
   switchProfile("form");
 }
 </script>

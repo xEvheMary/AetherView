@@ -3,17 +3,20 @@ import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useProfile, type Profile } from "./composables/useProfile";
+import { useAppearance } from "./composables/useAppearance.ts";
 
 const appWindow = getCurrentWindow();
 const { switchProfile } = useProfile();
+const { setTheme } = useAppearance();
 const profileLoaded = ref(false);
 import hudControls from "./components/hud/hudControls.vue";
 import dashboard from "./components/hud/dashboard.vue";
 
 onMounted(async () => {
-  // invoke("position_window_bottom_right");
   const profileMode = await invoke("get_profile_mode");
+  const theme = await invoke("get_theme");
   switchProfile(profileMode as Profile);
+  setTheme(theme as "dark" | "light");
   profileLoaded.value = true;
 });
 async function startResizing() {

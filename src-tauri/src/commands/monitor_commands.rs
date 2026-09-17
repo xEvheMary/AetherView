@@ -5,6 +5,7 @@ use tauri::{Manager, State, Emitter};
 
 use crate::utils::data::get_config_path;
 use crate::models::monitor::{MonitorState, MonitorStatus, MonitorTarget};
+use crate::commands::settings::{load_settings};
 
 #[tauri::command]
 pub fn get_monitor_targets(
@@ -87,15 +88,18 @@ pub fn save_monitors(
 }
 
 pub fn initialize_monitor_thread(app: tauri::AppHandle) {
+    let setting = load_settings(&app).unwrap();
+    let timeout_secs = setting.monitoring.slow_response_threshold_ms / 1000;
+    let interval_secs = setting.monitoring.engine_tick_seconds;
     std::thread::spawn(move || {
         let client = reqwest::blocking::Client::builder()
-            .timeout(std::time::Duration::from_secs(15))
+            .timeout(std::time::Duration::from_secs(timeout_secs))
             .build()
             .unwrap();
 
         loop {
             run_monitor_cycle(&app, &client);
-            std::thread::sleep(std::time::Duration::from_secs(1));
+            std::thread::sleep(std::time::Duration::from_secs(interval_secs));
         }
     });
 }
@@ -141,13 +145,21 @@ pub fn run_monitor_cycle(app: &tauri::AppHandle, client: &reqwest::blocking::Cli
                     last_error: last_error_status,
                 };
             } else {
-                println!("[{:?}] Monitor check failed for target {}: {:?}", now, target.id, &result.as_ref().err());
+                println!("[{:?}] Monitor check failed for target {}: {:?}", now, target.id, &result.as_ref().err().unwrap());
                 status_result = MonitorStatus {
                     id: target.id.clone(),
                     healthy: false,
                     response_time_ms: Some(elapsed),
                     last_checked: Some(now),
-                    last_error: result.err().map(|e| e.to_string()),
+                    last_error: result.err().map(|e| {
+                        if e.is_timeout() {
+                            "timeout".to_string()
+                        } else if e.is_connect() {
+                            "connection error".to_string()
+                        } else {
+                            e.to_string()
+                        }
+                    }),
                 };
                 
             }

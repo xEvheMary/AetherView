@@ -3,6 +3,29 @@ use serde_json;
 use crate::models::settings::AppSettings;
 use crate::utils::data::get_config_path;
 
+#[tauri::command]
+pub fn get_settings(app: tauri::AppHandle) -> Result<AppSettings, String> {
+    load_settings(&app)
+}
+
+#[tauri::command]
+pub fn store_settings(app: tauri::AppHandle, settings: AppSettings) -> Result<(), String> {
+    save_settings(&app, &settings)
+}
+
+#[tauri::command]
+pub fn get_theme(app: tauri::AppHandle) -> Result<String, String> {
+    let settings = load_settings(&app)?;
+    Ok(settings.appearance.theme)
+}
+
+#[tauri::command]
+pub fn set_theme(app: tauri::AppHandle, theme: String) -> Result<(), String> {
+    let mut settings = load_settings(&app)?;
+    settings.appearance.theme = theme;
+    save_settings(&app, &settings)
+}
+
 pub fn load_settings(app: &tauri::AppHandle) -> Result<AppSettings, String> {
     let settings_path = get_config_path(app)?.join("settings.json");
 
@@ -40,6 +63,5 @@ pub fn save_settings(
 
     fs::write(settings_path, json)
         .map_err(|e| e.to_string())?;
-
     Ok(())
 }
