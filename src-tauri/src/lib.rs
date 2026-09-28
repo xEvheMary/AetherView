@@ -6,14 +6,14 @@ pub mod utils;
 use std::sync::Mutex;
 use tauri::Manager;
 
-use crate::commands::metrics::get_system_metrics;
+use crate::commands::metrics::{get_system_metrics, get_disk_metrics};
 use crate::commands::monitor_commands::{
     add_monitor_targets, get_monitor_state, initialize_monitor_thread, load_monitor,
 };
 use crate::commands::profile::{get_profile_mode, set_profile_mode, set_profile_mode_internal};
 use crate::commands::settings::{get_settings, get_theme, load_settings, store_settings};
 use crate::commands::system_commands::get_top_processes;
-use crate::models::{metrics::NetworkState, monitor::MonitorState};
+use crate::models::{metrics::{NetworkState, DiskState}, monitor::MonitorState};
 use crate::utils::position::{
     position_window_bottom_right, restore_window_position, save_window_position,
 };
@@ -27,6 +27,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             app.manage(Mutex::new(NetworkState::default()));
+            app.manage(Mutex::new(DiskState::default()));
             app.manage(Mutex::new(MonitorState::default()));
             let settings = load_settings(app.handle()).map_err(|e| e.to_string())?;
             set_profile_mode_internal(app.handle(), settings.general.active_profile.clone())?;
@@ -53,6 +54,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             get_system_metrics,
+            get_disk_metrics,
             position_window_bottom_right,
             get_top_processes,
             get_profile_mode,

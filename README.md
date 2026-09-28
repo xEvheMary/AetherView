@@ -2,7 +2,7 @@
 
 Rainmeter inspired app / widget, built for developers in mind, for monitoring resources, service / application status, and developer observability.
 
-![Static Badge](https://img.shields.io/badge/version-0.2.0-orange?style=flat)
+![Static Badge](https://img.shields.io/badge/version-0.3.2-orange?style=flat)
 
 ![Static Badge](https://img.shields.io/badge/Tauri-24C8D8?style=for-the-badge&logo=tauri&labelColor=black)
 ![Static Badge](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&labelColor=black)

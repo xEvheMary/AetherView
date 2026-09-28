@@ -44,8 +44,9 @@ function formatMetrics(metrics: number): string {
         ><span>{{ formatMetrics(metrics.memory_usage) }} %</span>
       </div>
       <div>
-        <span v-if="!props.minimal">Disk Usage:</span><span v-else>Disk: </span
-        ><span>{{ formatMetrics(metrics.disk_usage) }} GB</span>
+        <span v-if="!props.minimal">Disk Activity:</span
+        ><span v-else>Disk: </span
+        ><span>{{ formatMetrics(metrics.disk_usage) }} %</span>
       </div>
       <div v-if="!!props.minimal">
         <i class="bi bi-globe mx-1"></i>

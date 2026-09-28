@@ -11,6 +11,33 @@ pub struct SystemMetrics {
     pub upload_speed: f64,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DiskMetric {
+    pub name: String,
+    pub mount_point: String,
+    pub total_bytes: u64,
+    pub available_bytes: u64,
+    pub used_bytes: u64,
+    pub used_percent: f32,
+}
+
+#[derive(Debug, Clone)]
+pub struct DiskState {
+    pub last_read_bytes: u64,
+    pub last_written_bytes: u64,
+    pub last_update: Option<Instant>,
+}
+
+impl DiskState {
+    pub fn default() -> Self {
+        Self {
+            last_read_bytes: 0,
+            last_written_bytes: 0,
+            last_update: None,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct NetworkState {
     pub last_received: u64,
